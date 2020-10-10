@@ -1,13 +1,14 @@
 from PIL import Image
 import cv2
 import numpy as np
+import sys
 
-message = "Message to be encrypted"
-password = 42
+message = input("Message to be encrypted: ")
+password = int(input("Password to encrypt data (seed): "))
 
 np.random.seed(password)
 
-img = cv2.imread("image.jpg")
+img = cv2.imread(sys.argv[1])
 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
 def tobits(string):
@@ -25,11 +26,9 @@ def tobits(string):
 byte_array = np.array(tobits(message))
 byte_array.resize(img.shape)
 
-print(byte_array)
 
 np.random.shuffle(byte_array.ravel()) # Shuffle bits 
 byte_array.resize(img.shape)
-
 
 # For decryption
 # print(byte_array.reshape(-1, 8)[:20])
@@ -43,4 +42,4 @@ img[(img % 2 == 1) & (byte_array == 3)] += 1 # Make uneven number evenn
 img[img > 255] -= 2
 
 im = Image.fromarray(img)
-im.save("outfile.png")
+im.save(sys.argv[2])
