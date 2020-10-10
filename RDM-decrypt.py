@@ -40,3 +40,4 @@ for byte in byte_array[:n_read]:
     message.append(b.to_bytes((b.bit_length() + 7) // 8, "big").decode(errors="ignore"))
 
 print("".join(message))
+print(message)
