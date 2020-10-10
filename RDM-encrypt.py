@@ -20,7 +20,7 @@ def tobits(string):
 
 byte_array = np.array(tobits(message))
 byte_array.resize(img.shape)
-np.random.shuffle(byte_array) # Shuffle bits 
+#np.random.shuffle(byte_array) # Shuffle bits 
 
 # For decryption
 # print(byte_array.reshape(-1, 8)[:20])
