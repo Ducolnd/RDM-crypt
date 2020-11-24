@@ -1,4 +1,5 @@
-from flask import Flask, request, Response, send_file
+from flask import Flask, request, Response, send_file, json, make_response
+from flask_cors import CORS, cross_origin
 import numpy as np
 import cv2
 from PIL import Image
@@ -7,18 +8,32 @@ import io
 
 app = Flask(__name__)
 
+CORS(app, resources={r"/*": {"origins": "*"}})
+
+app.config['CORS_HEADERS'] = 'Content-Type'
+
+# CORS test endpoint
+@app.route("/")
+def hello():
+    return "CORS TESTING Duco"
+
 
 @app.route('/stego', methods=['POST'])
 def test():
+
+
     r = request
 
-    #get message and password from headers
+    #get message and seed from headers
     message = request.headers.get('RDM-message')
-    password = request.headers.get('RDM-password')
+    seed = int(request.headers.get('RDM-password'))
 
-    np.random.seed(password)
+    np.random.seed(seed)
 
-    nparr = np.fromstring(r.data, np.uint8)
+    image = np.fromstring(r.files["file"].read(), np.uint8)
+
+
+    nparr = np.fromstring(image, np.uint8)
 
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
@@ -63,14 +78,21 @@ def test():
     file_object = io.BytesIO()
 
     # write PNG in file-object
-    img.save(file_object, 'jpg')
+    im.save(file_object, 'png')
+
+    # im = Image.fromarray(img)    // Test uploading
+    # im.save(r.files["file"].filename)
 
     # move to beginning of file so `send_file()` it will read from start    
     file_object.seek(0)
 
-    #return image
+
+
+
+    #response = make_response(file_object)
+
     return send_file(file_object, mimetype='image/PNG')
 
 
 # start flask app
-app.run(host="0.0.0.0", port=8080)
+app.run(host="127.0.0.1", debug=True, port=8080)

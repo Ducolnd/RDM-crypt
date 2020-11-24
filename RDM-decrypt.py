@@ -39,5 +39,5 @@ for byte in byte_array[:n_read]:
     b = int(b, 2)
     message.append(b.to_bytes((b.bit_length() + 7) // 8, "big").decode(errors="ignore"))
 
-print("".join(message))
-print(message)
+print("Characters read from image: ", "".join(message))
+#print(message)
