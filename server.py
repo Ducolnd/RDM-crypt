@@ -1,4 +1,5 @@
 from flask import Flask, request, Response, send_file, json, make_response
+import base64
 from flask_cors import CORS, cross_origin
 import numpy as np
 import cv2
@@ -83,15 +84,12 @@ def test():
     # im = Image.fromarray(img)    // Test uploading
     # im.save(r.files["file"].filename)
 
-    # move to beginning of file so `send_file()` it will read from start    
-    file_object.seek(0)
+    print("Created encrypted image")
 
-
-
-
-    #response = make_response(file_object)
-
-    return send_file(file_object, mimetype='image/PNG')
+    img_str = base64.encodebytes(file_object.getvalue()).decode('ascii')
+    response = make_response(img_str, 200)
+    response.mimetype = "text/plain"
+    return response
 
 
 # start flask app

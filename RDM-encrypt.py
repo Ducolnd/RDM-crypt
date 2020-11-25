@@ -26,6 +26,8 @@ def tobits(string):
 byte_array = np.array(tobits(message))
 byte_array.resize(img.shape)
 
+print(byte_array)
+
 
 np.random.shuffle(byte_array.ravel()) # Shuffle bits 
 byte_array.resize(img.shape)

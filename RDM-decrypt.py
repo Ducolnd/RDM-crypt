@@ -9,9 +9,9 @@ n_read = int(input("How many characters should be read? ")) # How many character
 img = cv2.imread(sys.argv[1])
 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-flat_img = img.ravel()
-
 np.random.seed(password)
+
+flat_img = img.ravel()
 
 order = np.arange(img.shape[0] * img.shape[1] * img.shape[2])
 np.random.shuffle(order)
@@ -36,8 +36,7 @@ for byte in byte_array[:n_read]:
     byte = [str(int(i)) for i in byte]
     b = ''.join(byte)
     
-    b = int(b, 2)
-    message.append(b.to_bytes((b.bit_length() + 7) // 8, "big").decode(errors="ignore"))
+    b = int(b, 2) # Convert 01 string to int 01110100 --> 116
+    message.append(chr(b)) # int to character
 
 print("Characters read from image: ", "".join(message))
-#print(message)
